@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 
 export default function SignupPage() {
@@ -12,8 +13,22 @@ export default function SignupPage() {
         password: ""
     });
 
-    const onSignup = async () => {
+    const [loading,setLoading] = useState(false);
 
+    const router = useRouter();
+
+    const onSignup = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.post("/api/users/signup",user)
+            console.log("response =======>",response);
+            router.push("/login");
+        } catch (error:any) {
+            console.error(error);
+            toast.error(error.message);
+        }finally{
+            setLoading(false);
+        }
     }
 
     return (
@@ -58,7 +73,7 @@ export default function SignupPage() {
 
                 <button
                     className="w-96 bg-gray-950 h-10 p-2 text-white rounded-sm mt-8"
-
+                    onClick={onSignup}
                 >
                     Signup
                 </button>

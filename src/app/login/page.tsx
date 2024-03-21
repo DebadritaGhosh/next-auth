@@ -1,8 +1,9 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 
 export default function LoginPage() {
@@ -10,9 +11,22 @@ export default function LoginPage() {
         email: "",
         password: ""
     });
+    const [loading,setLoading] = useState(false);
+
+    const router = useRouter();
 
     const onLogin = async () => {
-
+        try {
+            setLoading(true);
+            const response = await axios.post("/api/users/login",user)
+            console.log("response =======>",response);
+            router.push("/profile");
+        } catch (error:any) {
+            console.error(error);
+            toast.error(error.message);
+        }finally{
+            setLoading(false);
+        }
     }
 
     return (
@@ -49,7 +63,7 @@ export default function LoginPage() {
 
                 <button
                     className="w-96 bg-gray-950 h-10 p-2 text-white rounded-sm mt-8"
-
+                    onClick={onLogin}
                 >
                     Login
                 </button>
