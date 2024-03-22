@@ -32,7 +32,6 @@ export async function POST(request: NextRequest, response: NextResponse) {
 
         }
 
-
         const tokenData = {
             id: user._id,
             username: user.username,
